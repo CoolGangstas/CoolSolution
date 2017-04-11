@@ -13,10 +13,16 @@ namespace ORM
     /// </summary>
     public class DropCreateDb : DropCreateDatabaseIfModelChanges<DbModel>
     {
-        protected override void Seed(DbModel dbModel)
+
+        /// <summary>
+        /// The seed.
+        /// </summary>
+        /// <param name="context">
+        /// The database context.
+        /// </param>
+        protected override void Seed(DbModel context)
         {
-            base.Seed(dbModel);
-            dbModel.
+            base.Seed(context);
         }
     }
 }
