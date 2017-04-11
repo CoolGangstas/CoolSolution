@@ -46,7 +46,7 @@ namespace BLL
         public void Create(RecordEntity entity)
         {
             this.dbService.Create(entity);
-            this.CreateInCloudAsync(entity.ToCloudRecordModel(), entity.Id);
+            this.CreateInCloudAsync(entity.ToCloudRecordModel(), entity.Id).Start();
         }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace BLL
         /// <returns>
         /// The <see cref="IQueryable"/>.
         /// </returns>
-        public IQueryable<RecordEntity> GetAllById(int userId)
+        public IEnumerable<RecordEntity> GetAllById(int userId)
         {
             return this.dbService.GetAllById(userId);
         }
@@ -72,19 +72,22 @@ namespace BLL
         public void Update(RecordEntity recordEntity)
         {
             this.dbService.Update(recordEntity);
-            this.UpdateInCloudAsync(recordEntity.ToCloudRecordModel());
+            this.UpdateInCloudAsync(recordEntity.ToCloudRecordModel()).Start();
         }
 
         /// <summary>
         /// The delete.
         /// </summary>
-        /// <param name="recordEntity">
-        /// The record entity.
+        /// <param name="id">
+        /// The id.
         /// </param>
-        public void Delete(RecordEntity recordEntity)
+        public void Delete(int id)
         {
-            this.dbService.Delete(recordEntity);
-            this.DeleteInCloudAsync(recordEntity.CloudId);
+            var cloudId = this.dbService.Delete(id);
+            if (cloudId != null)
+            {
+                Task task = this.DeleteInCloudAsync(2836);
+            }
         }
 
         /// <summary>
@@ -122,7 +125,10 @@ namespace BLL
         /// <param name="targetId">
         /// The target Id.
         /// </param>
-        private async void CreateInCloudAsync(CloudRecordModel entity, int targetId)
+        /// <returns>
+        /// The <see cref="Task"/>.
+        /// </returns>
+        private async Task CreateInCloudAsync(CloudRecordModel entity, int targetId)
         {
             HttpResponseMessage message = await this.cloudService.CreateItem(entity);
             IList<CloudRecordModel> entities = this.cloudService.GetItems(entity.UserId);
@@ -136,9 +142,12 @@ namespace BLL
         /// <param name="entity">
         /// The entity.
         /// </param>
-        private async void UpdateInCloudAsync(CloudRecordModel entity)
+        /// <returns>
+        /// The <see cref="Task"/>.
+        /// </returns>
+        private Task UpdateInCloudAsync(CloudRecordModel entity)
         {
-            await this.cloudService.UpdateItem(entity);
+            return Task.Run(() => this.cloudService.UpdateItem(entity));
         }
 
         /// <summary>
@@ -147,9 +156,12 @@ namespace BLL
         /// <param name="id">
         /// The id.
         /// </param>
-        private async void DeleteInCloudAsync(int id)
+        /// <returns>
+        /// The <see cref="Task"/>.
+        /// </returns>
+        private Task DeleteInCloudAsync(int id)
         {
-            await this.cloudService.DeleteItem(id);
+            return Task.Run(() => this.cloudService.DeleteItem(id));
         }
     }
 }

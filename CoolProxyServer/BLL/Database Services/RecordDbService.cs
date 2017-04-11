@@ -19,7 +19,7 @@ namespace BLL.Database_Services
     /// <summary>
     /// The database record service.
     /// </summary>
-    public class RecordDbService
+    class RecordDbService
     {
         /// <summary>
         /// The record repository.
@@ -60,9 +60,10 @@ namespace BLL.Database_Services
         /// <returns>
         /// The <see cref="IQueryable"/>.
         /// </returns>
-        public IQueryable<RecordEntity> GetAllById(int userId)
+        public IEnumerable<RecordEntity> GetAllById(int userId)
         {
-            return this.recordRepository.GetUserRecords(userId).Select(x => x.ToRecordEntity());
+            var records = this.recordRepository.GetUserRecords(userId);
+            return records.AsEnumerable().Select(x => x.ToRecordEntity());
         }
 
         /// <summary>
@@ -79,12 +80,15 @@ namespace BLL.Database_Services
         /// <summary>
         /// Deletes record from database.
         /// </summary>
-        /// <param name="recordEntity">
-        /// The record Entity.
+        /// <param name="id">
+        /// The id.
         /// </param>
-        public void Delete(RecordEntity recordEntity)
+        /// <returns>
+        /// The <see cref="int"/>.
+        /// </returns>
+        public int? Delete(int id)
         {
-            this.recordRepository.Delete(recordEntity.Id);
+            return this.recordRepository.Delete(id);
         }
 
         /// <summary>

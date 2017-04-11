@@ -1,7 +1,9 @@
 ﻿
 namespace DAL.Repositories
 {
+    using System.Collections.Generic;
     using System.Linq;
+    using System.Security;
 
     using DAL.DTO;
     using DAL.Interfaces;
@@ -12,7 +14,7 @@ namespace DAL.Repositories
     /// <summary>
     /// The record repository.
     /// </summary>
-    public class RecordRepository : IRecordRepository, ICloudUpdater
+    public class RecordRepository : ICloudUpdater
     {
 
         /// <summary>
@@ -54,14 +56,16 @@ namespace DAL.Repositories
         /// <param name="recordId">
         /// The record id.
         /// </param>
-        public void Delete(int recordId)
+        public int? Delete(int recordId)
         {
             Record record = this.context.Set<Record>().Find(recordId);
             if (record != null)
             {
                 this.context.Set<Record>().Remove(record);
+                this.context.SaveChanges();
+                return record.CloudId;
             }
-            this.context.SaveChanges();
+            return null;
         }
 
         /// <summary>
@@ -73,9 +77,10 @@ namespace DAL.Repositories
         /// <returns>
         /// The <see cref="IQueryable"/>.
         /// </returns>
-        public IQueryable<DalRecord> GetUserRecords(int userId)
+        public IEnumerable<DalRecord> GetUserRecords(int userId)
         {
-            return this.context.Set<Record>().Where(x => x.UserId == userId).Select(x => x.ToDalRecord());
+            var recordsList = this.context.Set<Record>().Where(x => x.UserId == userId);
+            return recordsList.AsEnumerable().Select(x => x.ToDalRecord());
         }
 
         /// <summary>

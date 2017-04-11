@@ -12,7 +12,7 @@ namespace BLL
     /// <summary>
     /// The user database service.
     /// </summary>
-    public class UserDbService
+    class UserDbService
     {
         /// <summary>
         /// The user repository.

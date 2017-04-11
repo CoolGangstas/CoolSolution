@@ -16,7 +16,7 @@ namespace BLL.Cloud_Services
     /// <summary>
     /// Works with Users backend.
     /// </summary>
-    public class UserCloudService
+    class UserCloudService
     {
         /// <summary>
         /// The url for users' creation.

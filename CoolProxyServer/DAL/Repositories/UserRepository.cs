@@ -37,10 +37,9 @@ namespace DAL.Repositories
         /// </returns>
         public int CreateUser(string name)
         {
-            return this.context.Set<User>().Add(new User()
-                                                    {
-                                                        Name = name
-                                                    }).Id;
+            var dalUser = this.context.Set<User>().Add(new User() { Name = name });
+            this.context.SaveChanges();
+            return dalUser.Id;
         }
 
         /// <summary>

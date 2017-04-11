@@ -18,7 +18,7 @@ namespace BLL.Cloud_Services
     /// <summary>
     /// The record cloud service.
     /// </summary>
-    public class RecordCloudService
+    class RecordCloudService
     {
         /// <summary>
         /// The url for getting all records.
