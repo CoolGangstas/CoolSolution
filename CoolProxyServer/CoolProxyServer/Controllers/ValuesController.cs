@@ -25,10 +25,10 @@ namespace CoolProxyServer.Controllers
         //}
 
 
-        public User Get(int id)
-        {
+        //public User Get(int id)
+        //{
             
-        }
+        //}
 
         /// <summary>
         /// Creates a new user

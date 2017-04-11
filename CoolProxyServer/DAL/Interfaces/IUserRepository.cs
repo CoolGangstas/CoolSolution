@@ -15,8 +15,12 @@ namespace DAL.Interfaces
         /// <summary>
         /// Creates new user.
         /// </summary>
-        /// <returns></returns>
-        int CreateUser();
-
+        /// <param name="name">
+        /// User name
+        /// </param>
+        /// <returns>
+        /// The <see cref="int"/>.
+        /// </returns>
+        int CreateUser(string name);
     }
 }

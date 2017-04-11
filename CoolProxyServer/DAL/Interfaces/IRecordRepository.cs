@@ -27,13 +27,13 @@ namespace DAL.Interfaces
         /// <summary>
         /// Creates new <see cref="DalRecord"/>.
         /// </summary>
-        /// <param name="name">
-        /// The name.
+        /// <param name="record">
+        /// The record.
         /// </param>
-        /// <param name="userId">
-        /// The user id.
-        /// </param>
-        void Create(string name, int userId);
+        /// <returns>
+        /// The <see cref="int"/>.
+        /// </returns>
+        int Create(DalRecord record);
 
         /// <summary>
         /// Updates record.

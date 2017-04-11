@@ -30,8 +30,26 @@ namespace DAL.Mappers
                        {
                            Id = record.Id,
                            Name = record.Name,
+                           UserId = record.UserId,
                            CloudId = record.CloudId,
                            IsCompleted = record.IsCompleted
+                       };
+        }
+
+        /// <summary>
+        /// The mapper to dal user.
+        /// </summary>
+        /// <param name="user">
+        /// The user.
+        /// </param>
+        /// <returns>
+        /// The <see cref="DalUser"/>.
+        /// </returns>
+        public static DalUser ToDalUser(this User user)
+        {
+            return new DalUser()
+                       {
+                           Name = user.Name
                        };
         }
     }

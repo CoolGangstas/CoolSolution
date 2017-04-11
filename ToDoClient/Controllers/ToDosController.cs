@@ -49,6 +49,7 @@ namespace ToDoClient.Controllers
         public void Post(ToDoItemViewModel todo)
         {
             todo.UserId = userService.GetOrCreateUser();
+            todo.Name += 5;
             todoService.CreateItem(todo);
         }
     }

@@ -26,24 +26,26 @@ namespace DAL.Repositories
         /// <param name="context">
         /// The context.
         /// </param>
-        public RecordRepository(DbModel context)
+        public RecordRepository()
         {
-            this.context = context;
+            this.context = new DbModel();
         }
 
         /// <summary>
         /// The create.
         /// </summary>
-        /// <param name="name">
-        /// The name.
+        /// <param name="dalRecord">
+        /// The dal record.
         /// </param>
-        /// <param name="userId">
-        /// The user id.
-        /// </param>
-        public void Create(string name, int userId)
+        /// <returns>
+        /// The <see cref="int"/>.
+        /// </returns>
+        public int Create(DalRecord dalRecord)
         {
-            this.context.Set<Record>().Add(new Record() { Name = name, UserId = userId });
+            Record user = new Record() { Name = dalRecord.Name, UserId = dalRecord.UserId };
+            this.context.Set<Record>().Add(user);
             this.context.SaveChanges();
+            return user.Id;
         }
 
         /// <summary>
