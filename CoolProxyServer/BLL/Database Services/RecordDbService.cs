@@ -48,8 +48,7 @@ namespace BLL.Database_Services
         /// </param>
         public void Create(RecordEntity entity)
         {
-            int recordId = this.recordRepository.Create(entity.ToDalRecord());
-            this.CreateInCloudAsync(entity.ToCloudRecordModel(), entity.Id);
+            this.recordRepository.Create(entity.ToDalRecord());
         }
 
         /// <summary>
@@ -75,7 +74,6 @@ namespace BLL.Database_Services
         public void Update(RecordEntity recordEntity)
         {
             this.recordRepository.Update(recordEntity.Id, recordEntity.IsCompleted);
-            this.UpdateInCloudAsync(recordEntity.ToCloudRecordModel());
         }
 
         /// <summary>
@@ -87,72 +85,20 @@ namespace BLL.Database_Services
         public void Delete(RecordEntity recordEntity)
         {
             this.recordRepository.Delete(recordEntity.Id);
-            this.DeleteInCloudAsync(recordEntity.CloudId);
         }
 
         /// <summary>
-        /// Finds id in array.
-        /// </summary>
-        /// <param name="entities">
-        /// The entities.
-        /// </param>
-        /// <param name="targetId">
-        /// The target id.
-        /// </param>
-        /// <returns>
-        /// The <see cref="int"/>.
-        /// </returns>
-        private static int FindId(IList<CloudRecordModel> entities, int targetId)
-        {
-            for (int i = entities.Count - 1; i >= 0; i--)
-            {
-                int id = Convert.ToInt32(entities[i].Name.Split((char)007)[1]);
-                if (id == targetId)
-                {
-                    return entities[i].ToDoId;
-                }
-            }
-
-            return 0;
-        }
-
-        /// <summary>
-        /// The create in cloud async.
-        /// </summary>
-        /// <param name="entity">
-        /// The entity.
-        /// </param>
-        /// <param name="targetId">
-        /// The target Id.
-        /// </param>
-        private async void CreateInCloudAsync(CloudRecordModel entity, int targetId)
-        {
-            HttpResponseMessage message = await this.cloudService.CreateItem(entity);
-            IList<CloudRecordModel> entities = this.cloudService.GetItems(entity.UserId);
-            int cloudId = FindId(entities, targetId);
-            this.recordRepository.UpdateCloudId(targetId, cloudId);
-        }
-
-        /// <summary>
-        /// The update in cloud async.
-        /// </summary>
-        /// <param name="entity">
-        /// The entity.
-        /// </param>
-        private async void UpdateInCloudAsync(CloudRecordModel entity)
-        {
-            await this.cloudService.UpdateItem(entity);
-        }
-
-        /// <summary>
-        /// Deletes in cloud async.
+        /// Update cloud id in database.
         /// </summary>
         /// <param name="id">
         /// The id.
         /// </param>
-        private async void DeleteInCloudAsync(int id)
+        /// <param name="cloudId">
+        /// The cloud id.
+        /// </param>
+        public void UpdateCloudId(int id, int cloudId)
         {
-            await this.cloudService.DeleteItem(id);
+            this.recordRepository.UpdateCloudId(id, cloudId);
         }
     }
 }
