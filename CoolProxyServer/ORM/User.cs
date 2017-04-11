@@ -26,6 +26,11 @@ namespace ORM
         public int CloudId { get; set; }
 
         /// <summary>
+        /// Gets or sets the name.
+        /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
         /// Gets or sets the records.
         /// </summary>
         public virtual ICollection<Record> Records { get; set; }

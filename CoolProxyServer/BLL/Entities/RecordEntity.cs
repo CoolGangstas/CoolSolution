@@ -4,17 +4,22 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DAL.DTO
+namespace BLL.Entities
 {
     /// <summary>
-    /// The dal record.
+    /// The record entity.
     /// </summary>
-    public class DalRecord
+    public class RecordEntity
     {
         /// <summary>
-        /// Gets or sets the id.
+        /// Gets or sets the record id.
         /// </summary>
         public int Id { get; set; }
+
+        /// <summary>
+        /// Gets or sets the to do id.
+        /// </summary>
+        public int CloudId { get; set; }
 
         /// <summary>
         /// Gets or sets the user id.
@@ -22,17 +27,12 @@ namespace DAL.DTO
         public int UserId { get; set; }
 
         /// <summary>
-        /// Gets or sets the cloud id.
-        /// </summary>
-        public int CloudId { get; set; }
-
-        /// <summary>
-        /// Gets or sets the name.
+        /// Gets or sets the record name.
         /// </summary>
         public string Name { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether is completed.
+        /// Gets or sets a value indicating whether record task is completed.
         /// </summary>
         public bool IsCompleted { get; set; }
     }

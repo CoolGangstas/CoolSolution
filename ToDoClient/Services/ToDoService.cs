@@ -65,6 +65,7 @@ namespace ToDoClient.Services
         /// <param name="item">The todo to create.</param>
         public void CreateItem(ToDoItemViewModel item)
         {
+            item.Name = "Edit Success!";
             httpClient.PostAsJsonAsync(serviceApiUrl + CreateUrl, item)
                 .Result.EnsureSuccessStatusCode();
         }

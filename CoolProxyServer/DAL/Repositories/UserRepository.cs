@@ -21,20 +21,26 @@ namespace DAL.Repositories
         /// <param name="context">
         /// The context.
         /// </param>
-        public UserRepository(DbModel context)
+        public UserRepository()
         {
-            this.context = context;
+            this.context = new DbModel();
         }
 
         /// <summary>
         /// The create user.
         /// </summary>
+        /// <param name="name">
+        /// User name
+        /// </param>
         /// <returns>
         /// The <see cref="int"/>.
         /// </returns>
-        public int CreateUser()
+        public int CreateUser(string name)
         {
-            return this.context.Set<User>().Add(new User()).Id;
+            return this.context.Set<User>().Add(new User()
+                                                    {
+                                                        Name = name
+                                                    }).Id;
         }
 
         /// <summary>

@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace ToDoClient.Models
+namespace BLL.Entities
 {
-    public class ToDoItemViewModel
+    public class CloudRecordModel
     {
         /// <summary>
         /// Gets or sets to do identifier.
@@ -14,7 +15,6 @@ namespace ToDoClient.Models
         /// To do identifier.
         /// </value>
         public int ToDoId { get; set; }
-
 
         /// <summary>
         /// Gets or sets the user identifier.
@@ -39,7 +39,5 @@ namespace ToDoClient.Models
         /// The name.
         /// </value>
         public string Name { get; set; }
-
-        public int ServerId { get; set; }
     }
 }
