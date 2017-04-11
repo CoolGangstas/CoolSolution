@@ -47,15 +47,13 @@ namespace BLL.Cloud_Services
         /// </summary>
         /// <param name="userName">The user name.</param>
         /// <returns>The User Id.</returns>
-        public int CreateUser(string userName)
+        public Task<HttpResponseMessage> CreateUser(string userName)
         {
-            var response =
-                this.httpClient.PostAsync(
-                        this.serviceApiUrl + CreateUrl,
-                        new StringContent(new JavaScriptSerializer().Serialize(userName), Encoding.UTF8, "application/json"))
-                    .Result;
-            response.EnsureSuccessStatusCode();
-            return Convert.ToInt32(response.Content.ReadAsStringAsync().Result);
+            var response = this.httpClient.PostAsync(
+                this.serviceApiUrl + CreateUrl,
+                new StringContent(new JavaScriptSerializer().Serialize(userName), Encoding.UTF8, "application/json"));   
+            response.Result.EnsureSuccessStatusCode();
+            return response; 
         }
     }
 }
