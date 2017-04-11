@@ -3,14 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Http;
+using System.Web.Mvc;
+using System.Web.Optimization;
 using System.Web.Routing;
 
 namespace todoclient
 {
     public class WebApiApplication : System.Web.HttpApplication
     {
-        protected void Application_Start()
-        {
+        protected void Application_Start(){
+            //AreaRegistration.RegisterAllAreas();
+            //GlobalConfiguration.RegisterRoutes(RouteTable.Routes);
             GlobalConfiguration.Configure(WebApiConfig.Register);
         }
     }

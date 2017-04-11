@@ -1,0 +1,55 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="utf-8" />
+    <link rel='stylesheet' href='Styles/bootstrap.min.css' type='text/css' media='all'>
+    <script src="Scripts/jquery-3.1.0.min.js"></script>
+    <style>
+        body {
+            background: url("Images/index.jpg") no-repeat center center fixed;
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
+            -o-background-size: cover;
+            background-size: cover;
+        }
+    </style>
+    <script>
+        $(function () {
+            $("#includedContent").load("Menu.html");
+        });
+
+        $(document).ready(function () {
+            $('button').click(function () {
+                $('#todo').append("<ul>" + $("input[name=task]").val() + " <a href='#' class='close' aria-hidden='true'>&times;</a></ul>");
+            });
+            $("body").on('click', '#todo a', function () {
+                $(this).closest("ul").remove();
+            });
+        });
+    </script>
+</head>
+<body>
+    <div id="includedContent"></div>
+    <div class="form-group" style="margin-top: 9%">
+        <h1 style="text-align: center">
+            ToDo <small>List</small>
+        </h1>
+        <form role="form" style="text-align: center">
+            <input type="text" id="myInput" placeholder="New task..." style="width: 30%;">
+        </form>
+        <div style="text-align: center">
+            <button type="button" class="btn btn btn-primary" style="margin-top: 1%;" nclick="newElement()">Add</button>
+        </div>
+    </div>
+
+    <ul id="myUL" style="list-style:none; margin-left: 35%;">
+        <li>Hit the gym</li>
+        <li class="checked">Pay bills</li>
+        <li>Meet George</li>
+        <li>Buy eggs</li>
+        <li>Read a book</li>
+        <li>Organize office</li>
+    </ul>
+</body>
+</html>
