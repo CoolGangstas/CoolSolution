@@ -13,6 +13,7 @@ namespace ORM
     /// </summary>
     public class UserConfig : EntityTypeConfiguration<User>
     {
+
         /// <summary>
         /// Initializes a new instance of the <see cref="UserConfig"/> class.
         /// </summary>
