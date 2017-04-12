@@ -239,7 +239,7 @@
             url: '/api/todos',
             async: false,
             success: function (result) {
-                loadTasks = result;
+                loadTasks[li.id] = result.slice(-1).pop();
             }
         });
 
@@ -265,7 +265,6 @@
                     async: false,
                     type: 'DELETE'
                 });
-                //loadTasks.length--;
             }            
         }
     });
