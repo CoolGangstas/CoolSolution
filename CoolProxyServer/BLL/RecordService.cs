@@ -89,7 +89,7 @@ namespace BLL
         public void Delete(int id)
         {
             var cloudId = this.dbService.Delete(id);
-            if (cloudId != 0)
+            if (cloudId != null && cloudId.Value != 0)
             {
                 Task task = this.DeleteInCloudAsync(cloudId.Value);
             }
