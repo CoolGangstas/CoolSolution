@@ -105,7 +105,7 @@
         </div>
 
         <button id="btn" type="button" class="btn btn-success btn-lg" onclick="createUser()"
-                style="margin-top: 1%; height: 30%; width: 20%; margin-left: 40%;">
+                style="margin-top: 1%; height: 30%; width: 20%; margin-left: 40%; display: none;">
             Sign in
         </button>
     </div>
@@ -117,8 +117,8 @@
     $(function () {
         $("#includedContent").load("Menu.html");
         var x = document.cookie;
-        if (x !== "") {
-            $("#btn").hide();
+        if (x === "") {
+            $("#btn").show();
         }
     });
 
