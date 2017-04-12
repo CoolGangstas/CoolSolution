@@ -20,22 +20,22 @@ namespace ToDoClient.Services
         /// <summary>
         /// The url for getting all todos.
         /// </summary>
-        private const string GetAllUrl = "ToDos?userId={0}";
+        private const string GetAllUrl = "Records?userId={0}";
 
         /// <summary>
         /// The url for updating a todo.
         /// </summary>
-        private const string UpdateUrl = "ToDos";
+        private const string UpdateUrl = "Records";
 
         /// <summary>
         /// The url for a todo's creation.
         /// </summary>
-        private const string CreateUrl = "ToDos";
+        private const string CreateUrl = "Records";
 
         /// <summary>
         /// The url for a todo's deletion.
         /// </summary>
-        private const string DeleteUrl = "ToDos/{0}";
+        private const string DeleteUrl = "Records/{0}";
 
         private readonly HttpClient httpClient;
 
