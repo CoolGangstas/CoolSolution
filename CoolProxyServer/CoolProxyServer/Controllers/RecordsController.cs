@@ -99,7 +99,7 @@ namespace CoolProxyServer.Controllers
                            Content =
                                new ObjectContent<IList<CloudRecordModel>>(
                                    this.recordService.GetAllById(userId).AsEnumerable()
-                                       .Select(x => Mappers.ToClientRecordModel())
+                                       .Select(x => x.ToClientRecordModel())
                                        .ToList(),
                                    this.Configuration.Formatters.JsonFormatter)
                        };

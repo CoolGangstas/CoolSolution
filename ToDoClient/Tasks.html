@@ -89,30 +89,6 @@
                 display: table;
                 clear: both;
             }
-
-        /*input {
-            border: none;
-            width: 75%;
-            padding: 10px;
-            float: left;
-            font-size: 16px;
-        }*/
-
-        /*.addBtn {
-            padding: 10px;
-            width: 25%;
-            background: #d9d9d9;
-            color: #555;
-            float: left;
-            text-align: center;
-            font-size: 16px;
-            cursor: pointer;
-            transition: 0.3s;
-        }*/
-
-        /*.addBtn:hover {
-            background-color: #bbb;
-        }*/
     </style>
 </head>
 <body>
@@ -151,18 +127,17 @@
         var ul = document.getElementById("taskUL");
         var o;
 
-        //loadTasks = $.get("/api/todos");
-
         $.ajax({
             type: 'get',
             url: '/api/todos',
+            async: false,
             success: function (result) {
-                loadTasks = JSON.parse('@Html.Raw(Json.Encode(Model))');
+                loadTasks = result;
             }
         });
 
         for (i = 0; i < loadTasks.length; i++) {
-            o = loadTasks[i];
+            o = loadTasks[i].Name;
             var li = document.createElement("li");
             li.appendChild(document.createTextNode(o));
             ul.appendChild(li);
