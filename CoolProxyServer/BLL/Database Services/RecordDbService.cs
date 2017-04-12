@@ -46,9 +46,9 @@ namespace BLL.Database_Services
         /// <param name="entity">
         /// The entity.
         /// </param>
-        public void Create(RecordEntity entity)
+        public int Create(RecordEntity entity)
         {
-            this.recordRepository.Create(entity.ToDalRecord());
+            return this.recordRepository.Create(entity.ToDalRecord());
         }
 
         /// <summary>

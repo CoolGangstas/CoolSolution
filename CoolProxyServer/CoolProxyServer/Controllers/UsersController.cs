@@ -39,8 +39,8 @@ namespace CoolProxyServer.Controllers
         [HttpPost]
         public HttpResponseMessage CreateUser([FromBody]string userName)
         {
-            this.userService.CreateUser(userName);
-            return Request.CreateResponse(HttpStatusCode.OK);
+            int userId = this.userService.CreateUser(userName);
+            return Request.CreateResponse(HttpStatusCode.OK,userId);
         }
     }
 }

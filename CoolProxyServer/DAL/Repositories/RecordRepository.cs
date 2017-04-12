@@ -44,10 +44,10 @@ namespace DAL.Repositories
         /// </returns>
         public int Create(DalRecord dalRecord)
         {
-            Record user = new Record() { Name = dalRecord.Name, UserId = dalRecord.UserId };
-            this.context.Set<Record>().Add(user);
+            Record record = new Record() { Name = dalRecord.Name, UserId = dalRecord.UserId };
+            this.context.Set<Record>().Add(record);
             this.context.SaveChanges();
-            return user.Id;
+            return record.Id;
         }
 
         /// <summary>

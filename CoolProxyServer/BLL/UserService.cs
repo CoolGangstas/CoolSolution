@@ -61,10 +61,27 @@ namespace BLL
         /// <param name="localId">
         /// The local id.
         /// </param>
-        private async void CreateCloudUserAsync(string name, int localId)
+        /// <returns>
+        /// The <see cref="Task"/>.
+        /// </returns>
+        private Task CreateCloudUserAsync(string name, int localId)
         {
-            HttpResponseMessage responseMessage = await this.cloudService.CreateUser(name);
-            var userId = Convert.ToInt32(responseMessage.Content.ReadAsStringAsync().Result);
+            return Task.Run(() => this.AsyncStore(name,localId));
+        }
+
+        /// <summary>
+        /// The async storage.
+        /// </summary>
+        /// <param name="name">
+        /// The name.
+        /// </param>
+        /// <param name="localId">
+        /// The local id.
+        /// </param>
+        private void AsyncStore(string name, int localId)
+        {
+            var response = this.cloudService.CreateUser(name);
+            int userId = Convert.ToInt32(response.Result.Content.ReadAsStringAsync().Result);
             this.databaseService.UpdateCloudId(localId, userId);
         }
     }
