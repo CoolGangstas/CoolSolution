@@ -50,7 +50,6 @@ namespace ToDoClient.Controllers
         public void Post(ToDoItemViewModel todo)
         {
             todo.UserId = userService.GetUser();
-            todo.Name += 5;
             todoService.CreateItem(todo);
         }
     }

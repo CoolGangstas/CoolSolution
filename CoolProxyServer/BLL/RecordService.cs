@@ -46,7 +46,7 @@ namespace BLL
         public void Create(RecordEntity entity)
         {
             var recordId = this.dbService.Create(entity);
-            entity.Name += (char)007;
+            entity.Name += '`' + recordId.ToString();
             this.CreateInCloudAsync(entity.ToCloudRecordModel(), recordId);
         }
 
@@ -73,7 +73,7 @@ namespace BLL
         public void Update(RecordEntity recordEntity)
         {
             this.dbService.Update(recordEntity);
-            this.UpdateInCloudAsync(recordEntity.ToCloudRecordModel()).Start();
+            this.UpdateInCloudAsync(recordEntity.ToCloudRecordModel());
         }
 
         /// <summary>
@@ -85,7 +85,7 @@ namespace BLL
         public void Delete(int id)
         {
             var cloudId = this.dbService.Delete(id);
-            if (cloudId != null)
+            if (cloudId != 0)
             {
                 Task task = this.DeleteInCloudAsync(cloudId.Value);
             }
@@ -107,8 +107,9 @@ namespace BLL
         {
             for (int i = entities.Count - 1; i >= 0; i--)
             {
-                int id = Convert.ToInt32(entities[i].Name.Split((char)007)[1]);
-                if (id == targetId)
+                int id = 0;
+                bool isNumber = int.TryParse(entities[i].Name.Split('`')[1], out id);
+                if (isNumber && id == targetId)
                 {
                     return entities[i].ToDoId;
                 }

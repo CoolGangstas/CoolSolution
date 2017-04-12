@@ -115,6 +115,7 @@ namespace DAL.Repositories
             {
                 record.CloudId = cloudId;
             }
+            this.context.SaveChanges();
         }
     }
 }

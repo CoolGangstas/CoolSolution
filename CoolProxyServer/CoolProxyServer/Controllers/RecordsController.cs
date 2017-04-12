@@ -14,6 +14,8 @@ namespace CoolProxyServer.Controllers
 
     using CoolProxyServer.Mapper;
 
+    using Mappers = BLL.Mappers.Mappers;
+
     /// <summary>
     /// The records controller.
     /// </summary>
@@ -97,7 +99,7 @@ namespace CoolProxyServer.Controllers
                            Content =
                                new ObjectContent<IList<CloudRecordModel>>(
                                    this.recordService.GetAllById(userId).AsEnumerable()
-                                       .Select(x => x.ToCloudRecordModel())
+                                       .Select(x => Mappers.ToClientRecordModel())
                                        .ToList(),
                                    this.Configuration.Formatters.JsonFormatter)
                        };
