@@ -13,43 +13,216 @@
             -o-background-size: cover;
             background-size: cover;
         }
-    </style>
-    <script>
-        $(function () {
-            $("#includedContent").load("Menu.html");
-        });
 
-        $(document).ready(function () {
-            $('button').click(function () {
-                $('#todo').append("<ul>" + $("input[name=task]").val() + " <a href='#' class='close' aria-hidden='true'>&times;</a></ul>");
-            });
-            $("body").on('click', '#todo a', function () {
-                $(this).closest("ul").remove();
-            });
-        });
-    </script>
+        * {
+            box-sizing: border-box;
+        }
+
+        #taskUL {
+            margin: 0 auto;
+            /*padding: 0;*/
+            width: 50%;
+        }
+
+
+            #taskUL li {
+                cursor: pointer;
+                position: relative;
+                padding: 12px 8px 12px 40px;
+                background: #eee;
+                font-size: 18px;
+                transition: 0.2s;
+                -webkit-user-select: none;
+                -moz-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
+            }
+
+                #taskUL li:nth-child(odd) {
+                    background: #f9f9f9;
+                }
+
+                #taskUL li:hover {
+                    background: #ddd;
+                }
+
+                #taskUL li.checked {
+                    background: #888;
+                    color: #fff;
+                    text-decoration: line-through;
+                }
+
+                    #taskUL li.checked::before {
+                        content: '';
+                        position: absolute;
+                        border-color: #fff;
+                        border-style: solid;
+                        border-width: 0 2px 2px 0;
+                        top: 10px;
+                        left: 16px;
+                        transform: rotate(45deg);
+                        height: 15px;
+                        width: 7px;
+                    }
+
+        .close {
+            position: absolute;
+            right: 0;
+            top: 0;
+            padding: 12px 16px 12px 16px;
+        }
+
+            .close:hover {
+                background-color: #f44336;
+                color: white;
+            }
+
+        .header {
+            background-color: #f44336;
+            padding: 30px 40px;
+            color: white;
+            text-align: center;
+        }
+
+            .header:after {
+                content: "";
+                display: table;
+                clear: both;
+            }
+
+        /*input {
+            border: none;
+            width: 75%;
+            padding: 10px;
+            float: left;
+            font-size: 16px;
+        }*/
+
+        /*.addBtn {
+            padding: 10px;
+            width: 25%;
+            background: #d9d9d9;
+            color: #555;
+            float: left;
+            text-align: center;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+        }*/
+
+        /*.addBtn:hover {
+            background-color: #bbb;
+        }*/
+    </style>
 </head>
 <body>
-    <div id="includedContent"></div>
-    <div class="form-group" style="margin-top: 9%">
-        <h1 style="text-align: center">
-            ToDo <small>List</small>
-        </h1>
-        <form role="form" style="text-align: center">
-            <input type="text" id="myInput" placeholder="New task..." style="width: 30%;">
-        </form>
-        <div style="text-align: center">
-            <button type="button" class="btn btn btn-primary" style="margin-top: 1%;" nclick="newElement()">Add</button>
+    <div class="wrapper">
+
+        <div id="includedContent"></div>
+
+        <div class="row" style="width: 100%; position: relative; display: inline-block; margin: auto;">
+
+            <div class="form-group">
+                <h1 style="text-align: center">
+                    ToDo <small>List</small>
+                </h1>
+                <form role="form" style="text-align: center">
+                    <input type="text" id="taskInput" placeholder="New task" style="width: 30%;">
+                </form>
+                <div style="text-align: center">
+                    <button type="button" class="btn btn btn-primary" style="margin-top: 1%;" onclick="newElement()">Add</button>
+                </div>
+            </div>
+
+            <ul id="taskUL" style="list-style: none;"></ul>
         </div>
     </div>
-
-    <ul id="myUL" style="list-style:none; margin-left: 35%;">
-        <li>Hit the gym</li>
-        <li class="checked">Pay bills</li>
-        <li>Meet George</li>
-        <li>Buy eggs</li>
-        <li>Read a book</li>
-        <li>Organize office</li>
-    </ul>
 </body>
 </html>
+
+<script>
+    var myNodelist = document.getElementsByTagName("LI");
+    var i;
+    var loadTasks;
+
+    $(function () {
+        $("#includedContent").load("Menu.html");
+
+        var ul = document.getElementById("taskUL");
+        var o;
+
+        //loadTasks = $.get("/api/todos");
+
+        $.ajax({
+            type: 'get',
+            url: '/api/todos',
+            success: function (result) {
+                loadTasks = JSON.parse('@Html.Raw(Json.Encode(Model))');
+            }
+        });
+
+        for (i = 0; i < loadTasks.length; i++) {
+            o = loadTasks[i];
+            var li = document.createElement("li");
+            li.appendChild(document.createTextNode(o));
+            ul.appendChild(li);
+        }
+    });
+
+    for (i = 0; i < myNodelist.length; i++) {
+        var span = document.createElement("SPAN");
+        var txt = document.createTextNode("\u00D7");
+        span.className = "close";
+        span.appendChild(txt);
+        myNodelist[i].appendChild(span);
+    }
+
+    var close = document.getElementsByClassName("close");
+    var i;
+    for (i = 0; i < close.length; i++) {
+        close[i].onclick = function () {
+            var div = this.parentElement;
+            div.style.display = "none";
+        }
+    }
+
+    var list = document.querySelector('ul');
+    list.addEventListener('click', function (ev) {
+        if (ev.target.tagName === 'LI') {
+            ev.target.classList.toggle('checked');
+        }
+    }, false);
+
+    function newElement() {
+        var li = document.createElement("li");
+        var inputValue = document.getElementById("taskInput").value;
+        $.post("/api/todos",
+            {
+                IsCompleted: false,
+                Name: inputValue
+            });
+        var t = document.createTextNode(inputValue);
+        li.appendChild(t);
+
+        if (inputValue === '') {
+            alert("Please, add a task!");
+        } else {
+            document.getElementById("taskUL").appendChild(li);
+        }
+        document.getElementById("taskInput").value = "";
+
+        var span = document.createElement("SPAN");
+        var txt = document.createTextNode("\u00D7");
+        span.className = "close";
+        span.appendChild(txt);
+        li.appendChild(span);
+
+        for (i = 0; i < close.length; i++) {
+            close[i].onclick = function () {
+                var div = this.parentElement;
+                div.style.display = "none";
+                //$.remove("/api/todos", x);
+            }
+        }
+    }
+</script>

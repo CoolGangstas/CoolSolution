@@ -13,13 +13,14 @@ namespace ToDoClient.Controllers
         private readonly ToDoService todoService = new ToDoService();
         private readonly UserService userService = new UserService();
 
+         
         /// <summary>
         /// Returns all todo-items for the current user.
         /// </summary>
         /// <returns>The list of todo-items.</returns>
         public IList<ToDoItemViewModel> Get()
         {
-            var userId = userService.GetOrCreateUser();
+            var userId = userService.GetUser();
             return todoService.GetItems(userId);
         }
 
@@ -29,7 +30,7 @@ namespace ToDoClient.Controllers
         /// <param name="todo">The todo-item to update.</param>
         public void Put(ToDoItemViewModel todo)
         {
-            todo.UserId = userService.GetOrCreateUser();
+            todo.UserId = userService.GetUser();
             todoService.UpdateItem(todo);
         }
 
@@ -48,7 +49,7 @@ namespace ToDoClient.Controllers
         /// <param name="todo">The todo-item to create.</param>
         public void Post(ToDoItemViewModel todo)
         {
-            todo.UserId = userService.GetOrCreateUser();
+            todo.UserId = userService.GetUser();
             todo.Name += 5;
             todoService.CreateItem(todo);
         }
