@@ -19,7 +19,7 @@ namespace CoolProxyServer.Controllers
     /// <summary>
     /// The records controller.
     /// </summary>
-    public class RecordsController : ApiController
+    public class ToDosController : ApiController
     {
         /// <summary>
         /// The record service.
@@ -27,9 +27,9 @@ namespace CoolProxyServer.Controllers
         private RecordService recordService;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="RecordsController"/> class.
+        /// Initializes a new instance of the <see cref="ToDosController"/> class.
         /// </summary>
-        public RecordsController()
+        public ToDosController()
         {
             this.recordService = new RecordService();
         }
@@ -46,8 +46,17 @@ namespace CoolProxyServer.Controllers
         [HttpPost]
         public HttpResponseMessage CreateItem([FromBody]Record value)
         {
-            this.recordService.Create(value.ToRecordEntityFromModel());
-            return Request.CreateResponse(HttpStatusCode.OK);
+            try
+            {
+                this.recordService.Create(value.ToRecordEntityFromModel());
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return this.Request.CreateResponse(HttpStatusCode.InternalServerError);
+            }
+
+            return this.Request.CreateResponse(HttpStatusCode.OK);
         }
 
         /// <summary>
@@ -62,8 +71,17 @@ namespace CoolProxyServer.Controllers
         [HttpPut]
         public HttpResponseMessage UpdateItem([FromBody]Record value)
         {
-            this.recordService.Update(value.ToRecordEntityFromModel());
-            return Request.CreateResponse(HttpStatusCode.OK);
+            try
+            {
+                this.recordService.Update(value.ToRecordEntityFromModel());
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return this.Request.CreateResponse(HttpStatusCode.InternalServerError);
+            }
+
+            return this.Request.CreateResponse(HttpStatusCode.OK);
         }
 
         /// <summary>
@@ -78,8 +96,16 @@ namespace CoolProxyServer.Controllers
         [HttpDelete]
         public HttpResponseMessage DeleteItem(int id)
         {
-            this.recordService.Delete(id);
-            return Request.CreateResponse(HttpStatusCode.OK);
+            try
+            {
+                this.recordService.Delete(id);
+            }
+            catch (Exception e)
+            {
+
+                return this.Request.CreateResponse(HttpStatusCode.InternalServerError);
+            }
+            return this.Request.CreateResponse(HttpStatusCode.OK);
         }
 
         /// <summary>

@@ -12,9 +12,9 @@ namespace ToDoClient.Services
     public class UserService
     {
         /// <summary>
-        /// The service URL.
+        /// The url api string.
         /// </summary>
-        private readonly string serviceApiUrl = ConfigurationManager.AppSettings["ToDoServiceUrl"];
+        public readonly string ApiUrlString;
 
         /// <summary>
         /// The url for users' creation.
@@ -30,6 +30,18 @@ namespace ToDoClient.Services
         {
             httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            try
+            {
+                ApiUrlString = ConfigurationManager.AppSettings["ToDoProxyUrl"];
+
+                //var ping = new System.Net.NetworkInformation.Ping();
+                //var result = ping.Send(this.ApiUrlString + "/Ping");
+
+            }
+            catch (Exception e)
+            {
+                ApiUrlString = ConfigurationManager.AppSettings["ToDoCloudUrl"];
+            }
         }
 
         /// <summary>
@@ -37,10 +49,9 @@ namespace ToDoClient.Services
         /// </summary>
         /// <param name="userName">The user name.</param>
         /// <returns>The User Id.</returns>
-        public int CreateUser(string userName)
+        private int PostUser(string userName)
         {
-            var response = httpClient.PostAsJsonAsync(serviceApiUrl + CreateUrl, userName).Result;
-            response.EnsureSuccessStatusCode();
+            var response = this.httpClient.PostAsJsonAsync(this.ApiUrlString + CreateUrl, userName).Result;
             return response.Content.ReadAsAsync<int>().Result;
         }
 
@@ -53,17 +64,27 @@ namespace ToDoClient.Services
             var userCookie = HttpContext.Current.Request.Cookies["user"];
             int userId;
 
-            bool success = int.TryParse(userCookie.Value, out userId);
+            if (userCookie != null)
+            {
+                bool success = int.TryParse(userCookie.Value, out userId);
+                if (success)
+                {
+                    return userId;
+                }
+            }
 
-            return userId;
+            return this.CreateUser();
         }
 
         /// <summary>
         /// Creates a new user.
         /// </summary>
-        public void CreateUser()
+        /// <returns>
+        /// The <see cref="int"/>.
+        /// </returns>
+        public int CreateUser()
         {
-            var userId = CreateUser("Noname: " + Guid.NewGuid());
+            var userId = this.PostUser("Noname: " + Guid.NewGuid());
 
             var cookie = new HttpCookie("user", userId.ToString())
             {
@@ -71,6 +92,7 @@ namespace ToDoClient.Services
             };
 
             HttpContext.Current.Response.SetCookie(cookie);
+            return userId;
         }
     }
 }
