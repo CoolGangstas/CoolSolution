@@ -12,12 +12,12 @@ namespace BLL
     /// <summary>
     /// The user database service.
     /// </summary>
-    public class UserDbService
+    class UserDbService
     {
         /// <summary>
         /// The user repository.
         /// </summary>
-        private readonly IUserRepository userRepository;
+        private readonly UserRepository userRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UserDbService"/> class.
@@ -39,7 +39,20 @@ namespace BLL
         public int CreateUser(string name)
         {
             return this.userRepository.CreateUser(name);
+        }
 
+        /// <summary>
+        /// Updates cloud user id in database.
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <param name="cloudId">
+        /// The cloud id.
+        /// </param>
+        public void UpdateCloudId(int id, int cloudId)
+        {
+            this.userRepository.UpdateCloudId(id, cloudId);
         }
 
     }

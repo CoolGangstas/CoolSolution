@@ -22,7 +22,7 @@ namespace DAL.Interfaces
         /// <returns>
         /// The <see cref="IQueryable{DalRecord}"/>.
         /// </returns>
-        IQueryable<DAL.DTO.DalRecord> GetUserRecords(int userId);
+        IEnumerable<DAL.DTO.DalRecord> GetUserRecords(int userId);
 
         /// <summary>
         /// Creates new <see cref="DalRecord"/>.

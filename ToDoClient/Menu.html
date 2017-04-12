@@ -1,4 +1,4 @@
-﻿<div class="navbar navbar-inverse navbar-fixed-top">
+﻿<div class="navbar navbar-inverse navbar-fixed-top" style="width: 100%; position: relative; display: inline-block;">
     <div class="container">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
@@ -12,8 +12,17 @@
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-left">
-                <li><a href="Tasks.html">My tasks</a></li>
+                <li id="tasks"><a href="Tasks.html">My tasks</a></li>
             </ul>
         </div>
     </div>
 </div>
+
+<script>
+    $(function () {
+        var x = document.cookie;
+        if (x === "") {
+            $("#tasks").hide();
+        }
+    });
+</script>

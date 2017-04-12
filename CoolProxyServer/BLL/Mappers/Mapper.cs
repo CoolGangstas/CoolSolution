@@ -70,15 +70,44 @@ namespace BLL.Mappers
                        };
         }
 
-        public static CloudRecordModel ToCloudRecordModel(this RecordEntity recordEntity)
+        /// <summary>
+        /// The to client record model.
+        /// </summary>
+        /// <param name="recordEntity">
+        /// The record entity.
+        /// </param>
+        /// <returns>
+        /// The <see cref="CloudRecordModel"/>.
+        /// </returns>
+        public static CloudRecordModel ToClientRecordModel(this RecordEntity recordEntity)
         {
             return new CloudRecordModel()
                        {
                            IsCompleted = recordEntity.IsCompleted,
                            Name = recordEntity.Name,
-                           ToDoId = recordEntity.CloudId,
+                           ToDoId = recordEntity.Id,
                            UserId = recordEntity.UserId
                        };
+        }
+
+        /// <summary>
+        /// The to cloud record model.
+        /// </summary>
+        /// <param name="recordEntity">
+        /// The record entity.
+        /// </param>
+        /// <returns>
+        /// The <see cref="CloudRecordModel"/>.
+        /// </returns>
+        public static CloudRecordModel ToCloudRecordModel(this RecordEntity recordEntity)
+        {
+            return new CloudRecordModel()
+            {
+                IsCompleted = recordEntity.IsCompleted,
+                Name = recordEntity.Name,
+                ToDoId = recordEntity.CloudId,
+                UserId = recordEntity.UserId
+            };
         }
 
         public static RecordEntity ToRecordEntity(this CloudRecordModel cloudRecordModel)
