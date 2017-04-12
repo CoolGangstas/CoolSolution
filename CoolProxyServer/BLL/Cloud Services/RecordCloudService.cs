@@ -96,13 +96,25 @@ namespace BLL.Cloud_Services
         /// <returns>
         /// The <see cref="Task"/>.
         /// </returns>
-        public Task UpdateItem(CloudRecordModel item)
+        public async Task<HttpResponseMessage> UpdateItem(CloudRecordModel item)
         {
             var httpMessage = this.httpClient.PutAsync(
                 this.serviceApiUrl + UpdateUrl,
                 new StringContent(new JavaScriptSerializer().Serialize(item), Encoding.UTF8, "application/json"));
+            try
+            {
                 httpMessage.Result.EnsureSuccessStatusCode();
-            return httpMessage;
+            }
+            catch (HttpRequestException e)
+            {
+                await Task.Delay(10000);
+                httpMessage = this.httpClient.PutAsync(
+                this.serviceApiUrl + UpdateUrl,
+                new StringContent(new JavaScriptSerializer().Serialize(item), Encoding.UTF8, "application/json"));
+                httpMessage.Result.EnsureSuccessStatusCode();
+            }
+                
+            return httpMessage.Result;
         }
 
         /// <summary>
@@ -114,11 +126,20 @@ namespace BLL.Cloud_Services
         /// <returns>
         /// The <see cref="Task"/>.
         /// </returns>
-        public Task DeleteItem(int id)
+        public async Task<HttpResponseMessage> DeleteItem(int id)
         {
             var message = this.httpClient.DeleteAsync(string.Format(this.serviceApiUrl + DeleteUrl, id));
+            try
+            {
                 message.Result.EnsureSuccessStatusCode();
-            return message;
+            }
+            catch (HttpRequestException e)
+            {
+                await Task.Delay(10000);
+                message = this.httpClient.DeleteAsync(string.Format(this.serviceApiUrl + DeleteUrl, id));
+                message.Result.EnsureSuccessStatusCode();
+            }
+            return message.Result;
         }
     }
 }

@@ -72,9 +72,9 @@ namespace BLL.Database_Services
         /// <param name="recordEntity">
         /// The record Entity.
         /// </param>
-        public void Update(RecordEntity recordEntity)
+        public int? Update(RecordEntity recordEntity)
         {
-            this.recordRepository.Update(recordEntity.Id, recordEntity.IsCompleted);
+            return this.recordRepository.Update(recordEntity.Id, recordEntity.IsCompleted);
         }
 
         /// <summary>

@@ -1,6 +1,7 @@
 ﻿
 namespace DAL.Repositories
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Security;
@@ -92,15 +93,20 @@ namespace DAL.Repositories
         /// <param name="isCompleted">
         /// The is completed.
         /// </param>
-        public void Update(int recordId, bool isCompleted)
+        /// <returns>
+        /// The <see cref="int"/>.
+        /// </returns>
+        public int? Update(int recordId, bool isCompleted)
         {
             Record record = this.context.Set<Record>().Find(recordId);
             if (record != null)
             {
                 record.IsCompleted = isCompleted;
+                this.context.SaveChanges();
+                return record.CloudId;
             }
+            return null;
 
-            this.context.SaveChanges();
         }
 
         /// <summary>
@@ -114,8 +120,15 @@ namespace DAL.Repositories
             if (record != null)
             {
                 record.CloudId = cloudId;
+                try
+                {
+                    this.context.SaveChanges();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                }
             }
-            this.context.SaveChanges();
         }
     }
 }

@@ -72,7 +72,11 @@ namespace BLL
         /// </param>
         public void Update(RecordEntity recordEntity)
         {
-            this.dbService.Update(recordEntity);
+            int? cloudId = this.dbService.Update(recordEntity);
+            if (cloudId != null)
+            {
+                recordEntity.CloudId = cloudId.Value;
+            }
             this.UpdateInCloudAsync(recordEntity.ToCloudRecordModel());
         }
 

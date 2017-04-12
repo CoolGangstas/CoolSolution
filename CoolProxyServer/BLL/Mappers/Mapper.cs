@@ -105,7 +105,7 @@ namespace BLL.Mappers
             {
                 IsCompleted = recordEntity.IsCompleted,
                 Name = recordEntity.Name,
-                ToDoId = recordEntity.Id,
+                ToDoId = recordEntity.CloudId,
                 UserId = recordEntity.UserId
             };
         }
