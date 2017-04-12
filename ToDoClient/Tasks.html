@@ -20,7 +20,6 @@
 
         #taskUL {
             margin: 0 auto;
-            /*padding: 0;*/
             width: 50%;
         }
 
@@ -118,33 +117,30 @@
 
 <script>
     var myNodelist = document.getElementsByTagName("LI");
-    var i;
     var loadTasks;
 
-    $(function () {
-        $("#includedContent").load("Menu.html");
+    $("#includedContent").load("Menu.html");
 
-        var ul = document.getElementById("taskUL");
-        var o;
+    var ul = document.getElementById("taskUL");
+    var o;
 
-        $.ajax({
-            type: 'get',
-            url: '/api/todos',
-            async: false,
-            success: function (result) {
-                loadTasks = result;
-            }
-        });
-
-        for (i = 0; i < loadTasks.length; i++) {
-            o = loadTasks[i].Name;
-            var li = document.createElement("li");
-            li.appendChild(document.createTextNode(o));
-            ul.appendChild(li);
+    $.ajax({
+        type: 'get',
+        url: '/api/todos',
+        async: false,
+        success: function (result) {
+            loadTasks = result;
         }
     });
 
-    for (i = 0; i < myNodelist.length; i++) {
+    for (var i = 0; i < loadTasks.length; i++) {
+        o = loadTasks[i].Name;
+        var li = document.createElement("li");
+        li.appendChild(document.createTextNode(o));
+        ul.appendChild(li);
+    }
+
+    for (var i = 0; i < myNodelist.length; i++) {
         var span = document.createElement("SPAN");
         var txt = document.createTextNode("\u00D7");
         span.className = "close";
@@ -153,11 +149,15 @@
     }
 
     var close = document.getElementsByClassName("close");
-    var i;
-    for (i = 0; i < close.length; i++) {
-        close[i].onclick = function () {
+
+    for (var i = 0; i < close.length; i++) {
+        close[i].onclick = function() {
             var div = this.parentElement;
             div.style.display = "none";
+            $.ajax({
+                url: "/api/todos/" + loadTasks[i].ToDoId,
+                type: 'DELETE'
+            });
         }
     }
 
@@ -191,13 +191,5 @@
         span.className = "close";
         span.appendChild(txt);
         li.appendChild(span);
-
-        for (i = 0; i < close.length; i++) {
-            close[i].onclick = function () {
-                var div = this.parentElement;
-                div.style.display = "none";
-                //$.remove("/api/todos", x);
-            }
-        }
     }
 </script>
