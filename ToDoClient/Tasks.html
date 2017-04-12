@@ -24,45 +24,45 @@
         }
 
 
-            #taskUL li {
-                cursor: pointer;
-                position: relative;
-                padding: 12px 8px 12px 40px;
-                background: #eee;
-                font-size: 18px;
-                transition: 0.2s;
-                -webkit-user-select: none;
-                -moz-user-select: none;
-                -ms-user-select: none;
-                user-select: none;
-            }
+        #taskUL li {
+            cursor: pointer;
+            position: relative;
+            padding: 12px 8px 12px 40px;
+            background: #eee;
+            font-size: 18px;
+            transition: 0.2s;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
 
-                #taskUL li:nth-child(odd) {
-                    background: #f9f9f9;
-                }
+        #taskUL li:nth-child(odd) {
+            background: #f9f9f9;
+        }
 
-                #taskUL li:hover {
-                    background: #ddd;
-                }
+        #taskUL li:hover {
+            background: #ddd;
+        }
 
-                #taskUL li.checked {
-                    background: #888;
-                    color: #fff;
-                    text-decoration: line-through;
-                }
+        #taskUL li.checked {
+            background: #888;
+            color: #fff;
+            text-decoration: line-through;
+        }
 
-                    #taskUL li.checked::before {
-                        content: '';
-                        position: absolute;
-                        border-color: #fff;
-                        border-style: solid;
-                        border-width: 0 2px 2px 0;
-                        top: 10px;
-                        left: 16px;
-                        transform: rotate(45deg);
-                        height: 15px;
-                        width: 7px;
-                    }
+        #taskUL li.checked::before {
+            content: '';
+            position: absolute;
+            border-color: #fff;
+            border-style: solid;
+            border-width: 0 2px 2px 0;
+            top: 10px;
+            left: 16px;
+            transform: rotate(45deg);
+            height: 15px;
+            width: 7px;
+        }
 
         .close {
             position: absolute;
@@ -71,10 +71,10 @@
             padding: 12px 16px 12px 16px;
         }
 
-            .close:hover {
-                background-color: #f44336;
-                color: white;
-            }
+        .close:hover {
+            background-color: #f44336;
+            color: white;
+        }
 
         .header {
             background-color: #f44336;
@@ -83,20 +83,17 @@
             text-align: center;
         }
 
-            .header:after {
-                content: "";
-                display: table;
-                clear: both;
-            }
+        .header:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
     </style>
 </head>
 <body>
     <div class="wrapper">
-
         <div id="includedContent"></div>
-
         <div class="row" style="width: 100%; position: relative; display: inline-block; margin: auto;">
-
             <div class="form-group">
                 <h1 style="text-align: center">
                     ToDo <small>List</small>
@@ -108,13 +105,11 @@
                     <button type="button" class="btn btn btn-primary" style="margin-top: 1%;" onclick="newElement()">Add</button>
                 </div>
             </div>
-
             <ul id="taskUL" style="list-style: none;"></ul>
         </div>
     </div>
 </body>
 </html>
-
 <script>
     var myNodelist = document.getElementsByTagName("LI");
     var loadTasks;
@@ -136,7 +131,12 @@
     for (var i = 0; i < loadTasks.length; i++) {
         o = loadTasks[i].Name;
         var li = document.createElement("li");
+        li.id = i;
         li.appendChild(document.createTextNode(o));
+        if (loadTasks[i].IsCompleted) {
+            li.classList.toggle('checked');
+        }
+        
         ul.appendChild(li);
     }
 
@@ -151,11 +151,12 @@
     var close = document.getElementsByClassName("close");
 
     for (var i = 0; i < close.length; i++) {
-        close[i].onclick = function() {
+        close[i].onclick = function () {
             var div = this.parentElement;
             div.style.display = "none";
             $.ajax({
-                url: "/api/todos/" + loadTasks[i].ToDoId,
+                url: "/api/todos/" + loadTasks[div.id].ToDoId,
+                async: false,
                 type: 'DELETE'
             });
         }
@@ -165,20 +166,36 @@
     list.addEventListener('click', function (ev) {
         if (ev.target.tagName === 'LI') {
             ev.target.classList.toggle('checked');
+            $.ajax({
+                url: "/api/todos/",
+                type: 'PUT',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    ToDoId: loadTasks[ev.target.id].ToDoId,
+                    IsCompleted: !loadTasks[ev.target.id].IsCompleted,
+                    Name: loadTasks[ev.target.id].name
+                })
+            });
         }
     }, false);
 
     function newElement() {
         var li = document.createElement("li");
+        li.id = loadTasks.length;
         var inputValue = document.getElementById("taskInput").value;
-        $.post("/api/todos",
-            {
+        $.ajax({
+            type: 'post',
+            url: '/api/todos',
+            async: false,
+            contentType: 'application/json',
+            data: JSON.stringify({
                 IsCompleted: false,
                 Name: inputValue
-            });
+            })
+        });
         var t = document.createTextNode(inputValue);
         li.appendChild(t);
-
+       
         if (inputValue === '') {
             alert("Please, add a task!");
         } else {
@@ -191,5 +208,26 @@
         span.className = "close";
         span.appendChild(txt);
         li.appendChild(span);
+
+        $.ajax({
+            type: 'get',
+            url: '/api/todos',
+            async: false,
+            success: function (result) {
+                loadTasks = result;
+            }
+        });
+
+        for (var i = 0; i < close.length; i++) {
+            close[i].onclick = function () {
+                var div = this.parentElement;
+                div.style.display = "none";
+                $.ajax({
+                    url: "/api/todos/" + loadTasks[div.id].ToDoId,
+                    async: false,
+                    type: 'DELETE'
+                });
+            }
+        }
     }
 </script>
