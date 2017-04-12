@@ -7,35 +7,37 @@ using ToDoClient.Models;
 
 namespace ToDoClient.Services
 {
+    using System;
+
     /// <summary>
     /// Works with ToDo backend.
     /// </summary>
     public class ToDoService
     {
         /// <summary>
-        /// The service URL.
+        /// The api url string.
         /// </summary>
-        private readonly string serviceApiUrl = ConfigurationManager.AppSettings["ToDoServiceUrl"];
+        public readonly string ApiUrlString;
 
         /// <summary>
         /// The url for getting all todos.
         /// </summary>
-        private const string GetAllUrl = "Records?userId={0}";
+        private const string GetAllUrl = "ToDos?userId={0}";
 
         /// <summary>
         /// The url for updating a todo.
         /// </summary>
-        private const string UpdateUrl = "Records";
+        private const string UpdateUrl = "ToDos";
 
         /// <summary>
         /// The url for a todo's creation.
         /// </summary>
-        private const string CreateUrl = "Records";
+        private const string CreateUrl = "ToDos";
 
         /// <summary>
         /// The url for a todo's deletion.
         /// </summary>
-        private const string DeleteUrl = "Records/{0}";
+        private const string DeleteUrl = "Todos/{0}";
 
         private readonly HttpClient httpClient;
 
@@ -46,6 +48,16 @@ namespace ToDoClient.Services
         {
             httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            try
+            {
+                this.ApiUrlString = ConfigurationManager.AppSettings["ToDoProxyUrl"];
+                //var ping = new System.Net.NetworkInformation.Ping();
+                //var result = ping.Send(this.ApiUrlString + "/Ping");
+            }
+            catch (Exception e)
+            {
+                this.ApiUrlString = ConfigurationManager.AppSettings["ToDoCloudUrl"];
+            }
         }
 
         /// <summary>
@@ -55,7 +67,8 @@ namespace ToDoClient.Services
         /// <returns>The list of todos.</returns>
         public IList<ToDoItemViewModel> GetItems(int userId)
         {
-            var dataAsString = httpClient.GetStringAsync(string.Format(serviceApiUrl + GetAllUrl, userId)).Result;
+            string dataAsString;
+            dataAsString = httpClient.GetStringAsync(string.Format(this.ApiUrlString + GetAllUrl, userId)).Result;
             return JsonConvert.DeserializeObject<IList<ToDoItemViewModel>>(dataAsString);
         }
 
@@ -65,8 +78,7 @@ namespace ToDoClient.Services
         /// <param name="item">The todo to create.</param>
         public void CreateItem(ToDoItemViewModel item)
         {
-            item.Name = item.Name;
-            httpClient.PostAsJsonAsync(serviceApiUrl + CreateUrl, item)
+            httpClient.PostAsJsonAsync(this.ApiUrlString + CreateUrl, item)
                 .Result.EnsureSuccessStatusCode();
         }
 
@@ -76,7 +88,7 @@ namespace ToDoClient.Services
         /// <param name="item">The todo to update.</param>
         public void UpdateItem(ToDoItemViewModel item)
         {
-            httpClient.PutAsJsonAsync(serviceApiUrl + UpdateUrl, item)
+            httpClient.PutAsJsonAsync(this.ApiUrlString + UpdateUrl, item)
                 .Result.EnsureSuccessStatusCode();
         }
 
@@ -86,7 +98,7 @@ namespace ToDoClient.Services
         /// <param name="id">The todo Id to delete.</param>
         public void DeleteItem(int id)
         {
-            httpClient.DeleteAsync(string.Format(serviceApiUrl + DeleteUrl, id))
+            httpClient.DeleteAsync(string.Format(this.ApiUrlString + DeleteUrl, id))
                 .Result.EnsureSuccessStatusCode();
         }
     }
