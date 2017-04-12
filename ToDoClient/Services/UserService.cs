@@ -55,21 +55,16 @@ namespace ToDoClient.Services
 
             bool success = int.TryParse(userCookie.Value, out userId);
 
-            /*
-             * Check for success!!!\
-             */
-
             return userId;
         }
 
         /// <summary>
-        /// Creates a new user
+        /// Creates a new user.
         /// </summary>
         public void CreateUser()
         {
             var userId = CreateUser("Noname: " + Guid.NewGuid());
 
-            // Store the user in a cookie for later access
             var cookie = new HttpCookie("user", userId.ToString())
             {
                 Expires = DateTime.Today.AddMonths(1)
