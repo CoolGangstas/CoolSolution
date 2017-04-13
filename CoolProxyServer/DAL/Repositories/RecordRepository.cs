@@ -4,6 +4,7 @@ namespace DAL.Repositories
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Net.Http;
     using System.Security;
 
     using DAL.DTO;
@@ -126,7 +127,8 @@ namespace DAL.Repositories
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e);
+                    HttpClient httpClient = new HttpClient();
+                    httpClient.DeleteAsync($"http://todo-service-api.azurewebsites.net/api/ToDos/{cloudId}");
                 }
             }
         }
